@@ -1,0 +1,22 @@
+{
+  "name": "node-RBAC",
+  "version": "0.0.0",
+  "description": "RBAC for node based on Yii's RBAC implementation",
+  "main": "authManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "rbac"
+  ],
+  "author": "Richard Walker",
+  "license": "BSD",
+  "dependencies": {
+    "underscore": "~1.4.4",
+    "superagent": "~0.15.2",
+    "expect.js": "~0.2.0",
+    "mocha": "~1.12.0",
+    "chai": "~1.7.2"
+  }
+}
