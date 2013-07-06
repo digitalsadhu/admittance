@@ -1,22 +1,26 @@
 {
-  "name": "node-RBAC",
-  "version": "0.0.0",
-  "description": "RBAC for node based on Yii's RBAC implementation",
-  "main": "authManager.js",
+  "name": "admittance",
+  "version": "0.0.1",
+  "description": "Role based access control implementation for node",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/test.coffee  --compilers coffee:coffee-script"
   },
-  "repository": "",
+  "repository": "git@github.com:digitalsadhu/admittance.git",
   "keywords": [
-    "rbac"
+    "rbac",
+    "access control",
+    "authentication",
+    "roles",
+    "permissions",
+    "auth"
   ],
   "author": "Richard Walker",
   "license": "BSD",
   "dependencies": {
-    "underscore": "~1.4.4",
-    "superagent": "~0.15.2",
-    "expect.js": "~0.2.0",
-    "mocha": "~1.12.0",
-    "chai": "~1.7.2"
+    "underscore": "1.4.4",
+    "mocha": "1.12.0",
+    "chai": "1.7.2",
+    "coffee-script": "1.6.3"
   }
 }
