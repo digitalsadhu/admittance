@@ -4,7 +4,7 @@
   "description": "Role based access control implementation for node",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/test.coffee  --compilers coffee:coffee-script"
+    "test": "mocha tests/test.coffee --compilers coffee:coffee-script"
   },
   "repository": "git@github.com:digitalsadhu/admittance.git",
   "keywords": [

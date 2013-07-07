@@ -4,9 +4,9 @@ chai.should()
 Admittance = require '../index.coffee'
 FileAdaptor = require '../file-adaptor.coffee'
 
-am = new Admittance(new FileAdaptor)
+am = new Admittance(new FileAdaptor('tests/rights.json'))
 
-describe 'Auth Manager', ->
+describe 'The Admittance class', ->
 
     afterEach (done) ->
         am.clearAll()
@@ -85,4 +85,28 @@ describe 'Auth Manager', ->
         it 'should clear all items from memory', ->
             # am.createAuthItem 'admin', 2, 'Admin user', '', 'N;'
             # am.assign 'admin', 1, '', 'N;'
-            
+
+###
+    FileAdaptor Tests
+###
+describe 'The FileAdaptor class', ->
+
+    beforeEach (done) ->
+        am = new Admittance(new FileAdaptor('tests/rights.json'))
+        done()
+
+    afterEach (done) ->
+        am.clearAll()
+        done()
+
+    describe 'load method', (done) ->
+
+        it 'should load existing rights file', (done) ->
+            am.on 'load', () ->
+                am.getAuthItem('admin').should.be.an('object')
+                am.getAuthItem('admin').name.should.equal('admin')
+                done()
+
+    describe 'save method', ->
+
+

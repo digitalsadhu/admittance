@@ -1,78 +1,49 @@
-_ = require('underscore')
+_ = require 'underscore'
+EventEmitter = require("events").EventEmitter
+util = require "util"
 
-#types:
-    # 0: operation, 1: task, 2: role
+class Admittance extends EventEmitter
 
-    # assignments: {
-    #     '501': {
-    #         'admin': {
-    #             'itemName': 'admin',
-    #             'id': '501',
-    #             'bizRule': null,
-    #             'data': 'N;'
-    #         },
-    #         'tmc': {
-    #             'itemName': 'tmc',
-    #             'id': '501',
-    #             'bizRule': null,
-    #             'data': 'N;'
-    #         }
-    #     },
-    #     '12': {
-    #         'tmc': {
-    #             'itemName': 'tmc',
-    #             'id': '12',
-    #             'bizRule': null,
-    #             'data': 'N;'
-    #         }
-    #     }
-    # }
-
-    # items = {
-    #     'admin': {
-    #         'name': 'admin',
-    #         'type': 2,
-    #         'description': 'Admin user',
-    #         'bizRule': null,
-    #         'data': 'N;'
-    #     },
-    #     'tmc': {
-    #         'name': 'tmc',
-    #         'type': 2,
-    #         'description': 'TMC user',
-    #         'bizRule': null,
-    #         'data': 'N;'
-    #     },
-    #     'acceptTMP': {
-    #         'name': 'acceptTMP',
-    #         'type': 0,
-    #         'description': 'Accept TMPs',
-    #         'bizRule': null,
-    #         'data': 'N;'  
-    #     }
-    # }
-
-    # children = {
-    #     'admin': ['acceptTMP', 'tmc'],
-    #     'tmc': ['acceptTMP']
-    # }
-
-class Admittance
-
-    constructor (@adaptor) ->
-        @adaptor.load()
-
+    _this = null
+    
+    # Internal data structures to hold data
+    # about auth items (roles, operations, etc)
     items = {}
     assignments = {}
     children = {}
 
+    constructor: (@adaptor) ->
+
+        _this = this
+
+        @adaptor.load (err, pItems, pAssignments, pChildren) ->
+            items = pItems
+            assignments = pAssignments
+            children = pChildren
+            _this.emit "load"
+
+    ###
+        Adds an auth item to another auth item as a child
+        This stored as an id reference.
+        eg. 'parent' = ['child1', 'child2']
+        An error event is triggered if either the item or the
+        child being referenced do not exist
+        @param {string} itemName
+        @param {string} childName
+    ###
     addItemChild: (itemName, childName) ->
         if items[childName] and items[itemName]
             children[itemName] = children[itemName] or []
             children[itemName].push childName
         else
-            throw "parent or child do not exist"
+            # @emit "error", "parent or child do not exist"
 
+    ###
+        Assigns a auth item (given by id) to a user (given by id)
+        @param {string} itemName - name of auth item
+        @param {string} userId   - id of user
+        @param {string} bizRule  - expression
+    ###
     assign: (itemName, userId, bizRule, data) ->
         item = 
             itemName: itemName
@@ -83,6 +54,18 @@ class Admittance
         assignments[userId] = assignments[userId] or {}
         assignments[userId][itemName] = item
 
+    ###
+        Checks if a user (give by id) has the requested
+        permission (specified by id)
+        if the requested permission is in any of the 
+        assigned auth item trees that have been assigned
+        to the user, this method will return true
+        @param {string} itemName - auth item
+        @param {string} userId   - user id
+        @param {array} params    - 
+        @return {boolean}        - true if the user has the
+        appropriate permissions
+    ###
     checkAccess: (itemName, userId, params = []) ->
         #get assignments
         userAssignments = []
@@ -92,14 +75,39 @@ class Admittance
 
         _.contains userAssignments, itemName
 
+    ###
+        Clears all permissions. The save method must be called
+        after calling clearAll if you want the wipe to be
+        persisted. If you dont call save after clearAll, when you
+        next load the application, permissions will be restored
+        via the adaptor
+    ###
     clearAll: ->
         items = {}
         assignments = {}
         children = {}
-
+        # @emit "empty"
+    ###
+        Clears all auth assignment. The save method must be called
+        after calling clearAuthAssignments if you want the wipe to be
+        persisted. If you dont call save after clearAuthAssignments,
+        when you next load the application, permissions will be restored
+        via the adaptor
+    ###
     clearAuthAssignments: ->
         assignments = {}
 
+    ###
+        Creates an auth item with a given name, type and description
+        You may also specify a business rule expression and any
+        data
+        @param {string} name       - name for the auth item eg. admin
+        @param {int}    type       - type int, either 0, 1, or 2
+            0: operation, 1: task, 2: role
+        @param {string} descrition - information about the auth item
+        @param {string} bizRule    - expression to evaluate
+        @param {string} data       - 
+    ###
     createAuthItem: (name, type, description = "", bizRule, data) ->
         item =
             name: name
@@ -109,12 +117,18 @@ class Admittance
             data: data
         items[name] = item
 
+    ###
+        Evaluates and checks give business rule
+    ###
     executeBizRule: (bizRule, params, data) ->
 
     ###
         Corresponds to directly assigned auth items
         for a user. ie, child items not directly 
         assigned to a user will not be returned
+        @param {string} itemName - name of auth item eg. admin
+        @param {string} userId   - user id to return against
+        @return {object} - assignment data in an object
     ###
     getAuthAssignment: (itemName, userId) ->
         if assignments[userId] and assignments[userId][itemName]
@@ -124,11 +138,13 @@ class Admittance
     ###
         Returns directly assigned user auth items
         ie, implied auth assignments are not returned
+        @param {string} userId - id of user
+        @return {object} - object where each key is an
+        assignment for the given user
     ###
     getAuthAssignments: (userId) ->
         assignments[userId]
         
-
     getAuthItem: (name) ->
         items[name]
 
@@ -166,13 +182,15 @@ class Admittance
             assignments[userId][itemName] = null
 
     save: (cb) ->
-        @adaptor.save cb
+        @adaptor.save @items, @assignments, @children, ->
+            # @emit "save"
+            cb()
 
-    saveAuthAssignment: (assignment, cb) ->
-        @adaptor.saveAssignment assignment, cb
+    # saveAuthAssignment: (assignment, cb) ->
+    #     @adaptor.saveAssignment assignment, cb
 
-    saveAuthItem: (item, oldName, cb) ->
-        @adaptor.saveAuthItem item, oldName, cb
+    # saveAuthItem: (item, oldName, cb) ->
+    #     @adaptor.saveAuthItem item, oldName, cb
 
     ###
      Recursively traverse items into a flat array
@@ -196,5 +214,5 @@ class Admittance
             childItems[name] = items[name]
         childItems
 
-
+# util.inherits Admittance, EventEmitter
 module.exports = Admittance
