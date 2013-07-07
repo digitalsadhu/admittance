@@ -1,8 +1,10 @@
 chai = require 'chai'
 chai.should()
 
-Admittance = require '../index.coffee'
-FileAdaptor = require '../file-adaptor.coffee'
+AdmittanceModule = require '../index'
+Admittance = AdmittanceModule.Admittance
+FileAdaptor = AdmittanceModule.FileAdaptor
+
 
 am = new Admittance(new FileAdaptor('tests/rights.json'))
 

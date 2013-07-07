@@ -14,7 +14,10 @@ I wrote this module in coffeescript for the main reason of trying coffeescript o
 ```javascript
 npm install admittance
 
-am = require('admittance')
+admittance = require("admittance");
+
+Admittance = admittance.Admittance
+FileAdaptor = admittance.FileAdaptor
 
 am = new Admittance(new FileAdaptor());
 am.on('load', function () {
