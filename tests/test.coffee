@@ -1,9 +1,10 @@
-util = require 'util'
-
 chai = require 'chai'
 chai.should()
 
-am = require '../index.coffee'
+Admittance = require '../index.coffee'
+FileAdaptor = require '../file-adaptor.coffee'
+
+am = new Admittance(new FileAdaptor)
 
 describe 'Auth Manager', ->
 

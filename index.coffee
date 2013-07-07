@@ -57,7 +57,10 @@ _ = require('underscore')
     #     'tmc': ['acceptTMP']
     # }
 
-class AuthManager
+class Admittance
+
+    constructor (@adaptor) ->
+        @adaptor.load()
 
     items = {}
     assignments = {}
@@ -162,11 +165,14 @@ class AuthManager
         if assignments[userId] and assignments[userId][itemName]
             assignments[userId][itemName] = null
 
-    save: ->
+    save: (cb) ->
+        @adaptor.save cb
 
-    saveAuthAssignment: (assignment) ->
+    saveAuthAssignment: (assignment, cb) ->
+        @adaptor.saveAssignment assignment, cb
 
-    saveAuthItem: (item, oldName) ->
+    saveAuthItem: (item, oldName, cb) ->
+        @adaptor.saveAuthItem item, oldName, cb
 
     ###
      Recursively traverse items into a flat array
@@ -191,4 +197,4 @@ class AuthManager
         childItems
 
 
-module.exports = new AuthManager
+module.exports = Admittance
