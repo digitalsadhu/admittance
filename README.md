@@ -19,7 +19,7 @@ admittance = require("admittance");
 Admittance = admittance.Admittance
 FileAdaptor = admittance.FileAdaptor
 
-am = new Admittance(new FileAdaptor());
+am = new Admittance(new FileAdaptor("path/to/jsonfile"));
 am.on('load', function () {
    //perform operations here 
 });
