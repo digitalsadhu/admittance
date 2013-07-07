@@ -83,14 +83,14 @@ am.checkAccess('editPosts', 43) // true
 
 Admittance comes with an in file storage adaptor. It should be pretty easy to implement new adpators if you prefer to use database engines to store access control data.
 
-Take a look at file-adaptor.coffee, implement the load, save, saveAuthItem and saveAuthAssignment methods and pass an instance of your adaptor in to Admittance when you start it up.
+Take a look at file-adaptor.coffee, implement the load and save methods and pass an instance of your adaptor in to Admittance when you start it up.
 
 eg. 
+```javascript
 am = new Admittance(new myAdaptor)
+```
 
-The adaptor must load and save data in the following form:
-
-eg.
+The adaptor must load data in the following 3 (json) forms:
 
 defines assignments between user Ids and auth items with additional
 data and business rules
@@ -155,10 +155,10 @@ data can be defined
 }
 ```
 
-//maps parent auth items to child auth items
+maps parent auth items to child auth items
 
 ```javascript
-"children" = {
+"children": {
     "admin": ["acceptTMP", "tmc"],
     "tmc": ["acceptTMP"]
 }
