@@ -1,7 +1,11 @@
 Admittance
 ==========
 
-Role based access control module for node. The interface is based off the Yii php framework's RBAC interface. The implementation is written in coffee script and is entirely original
+Role based access control module for node. The interface is based off the Yii php framework's RBAC interface. The implementation is written in coffee script and is entirely original.
+
+This module is under heavy development at the moment and some several key features are not yet implemented... ehh hmm, persisting permissions for example... Anyway, don't use it yet. Do contribute though! Accepting pull requests! 
+
+I wrote this module in coffeescript for the main reason of trying coffeescript out. I will most likely re-write a version in javascript at some point as well.
 
 ## Usage
 
