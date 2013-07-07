@@ -97,10 +97,10 @@ data and business rules
 
 ```json
 "assignments": {
-    "501": { //user id
+    "501": {
         "admin": {
             "itemName": "admin",
-            "id": "501", //user id
+            "id": "501",
             "bizRule": null,
             "data": "N;"
         },
@@ -130,7 +130,7 @@ business rules can be defined
 data can be defined
 
 ```json
-"items" = {
+"items": {
     "admin": {
         "name": "admin",
         "type": 2,
@@ -157,7 +157,7 @@ data can be defined
 
 maps parent auth items to child auth items
 
-```javascript
+```json
 "children": {
     "admin": ["acceptTMP", "tmc"],
     "tmc": ["acceptTMP"]
