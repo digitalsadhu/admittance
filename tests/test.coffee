@@ -4,6 +4,7 @@ chai.should()
 AdmittanceModule = require '../index'
 Admittance = AdmittanceModule.Admittance
 FileAdaptor = AdmittanceModule.FileAdaptor
+fs = require 'fs'
 
 
 am = new Admittance(new FileAdaptor('tests/rights.json'))
@@ -99,9 +100,11 @@ describe 'The FileAdaptor class', ->
 
     afterEach (done) ->
         am.clearAll()
+        fs.readFile 'tests/rights-src.json', 'utf8', (err, data) ->
+            fs.writeFile 'tests/rights.json', data, () ->
         done()
 
-    describe 'load method', (done) ->
+    describe 'load method', () ->
 
         it 'should load existing rights file', (done) ->
             am.on 'load', () ->
@@ -110,5 +113,14 @@ describe 'The FileAdaptor class', ->
                 done()
 
     describe 'save method', ->
+        it 'should save rights to file', (done) ->
+            am.on 'load', () ->
+                am.createAuthItem 'my-test', 2, 'this is a test'
+                am.save () ->
+                    aam = new Admittance(new FileAdaptor('tests/rights.json'))
+                    aam.getAuthItem('my-test').should.be.an('object')
+                    done()
+
+                
 
 

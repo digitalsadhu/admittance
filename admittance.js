@@ -249,7 +249,8 @@
     };
 
     Admittance.prototype.save = function(cb) {
-      return this.adaptor.save(this.items, this.assignments, this.children, function() {
+      return this.adaptor.save(items, assignments, children, function() {
+        _this.emit("save");
         return cb();
       });
     };

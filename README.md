@@ -3,7 +3,7 @@ Admittance
 
 Role based access control module for node. The interface is based off the Yii php framework's RBAC interface. The implementation is written in coffee script and is entirely original.
 
-This module is under heavy development at the moment and some several key features are not yet implemented... ehh hmm, persisting permissions for example... Anyway, don't use it yet. Do contribute though! Accepting pull requests! 
+This module is under heavy development at the moment and well anyway, you probably shouldn't use it beyond testing it out yet. Do contribute though! Accepting pull requests! 
 
 I wrote this module in coffeescript for the main reason of trying coffeescript out. I will most likely re-write a version in javascript at some point as well.
 
@@ -64,20 +64,56 @@ am.checkAccess('editPosts', 43) // true
 ## Other methods
 
 ### clearAll
+
+Clears all permissions, you need to call save after to persist changes
+
 ### clearAuthAssignments
+
+Clears all auth assignments, you need to call save after to persist changes
+
 ### executeBizRule
+
+Business rules not yet implemented
+
 ### getAuthAssignment
+
+Gets a Auth assignment object
+
 ### getAuthAssignments
+
+gets all auth assignments for a user
+
 ### getAuthItem
+
+gets the object that represents an auth item
+
 ### getAuthItems
+
+gets all auth items for a user
+
 ### hasItemChild
+
+Checks if an auth item has the specified child
+
 ### isAssigned
+
+Checks if a user has a certain auth item assigned
+
 ### removeAuthItem
+
+Removes an auth item
+
 ### removeItemChild
+
+Removes the reference between a parent and child auth item
+
 ### revoke
+
+Revokes access for a certain auth item to a user
+
 ### save
-### saveAuthAssignment
-### saveAuthItem
+
+Persists any changes
 
 ## Events
 

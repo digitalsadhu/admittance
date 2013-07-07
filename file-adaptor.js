@@ -32,7 +32,7 @@
         children: children
       };
       data = JSON.stringify(json);
-      return fs.writeFile(this.fileName, 'utf8', data, function(err, data) {
+      return fs.writeFile(this.fileName, data, function(err, data) {
         if (err) {
           return cb(err);
         } else {

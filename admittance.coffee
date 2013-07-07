@@ -182,8 +182,8 @@ class Admittance extends EventEmitter
             assignments[userId][itemName] = null
 
     save: (cb) ->
-        @adaptor.save @items, @assignments, @children, ->
-            # @emit "save"
+        @adaptor.save items, assignments, children, () ->
+            _this.emit "save"
             cb()
 
     # saveAuthAssignment: (assignment, cb) ->

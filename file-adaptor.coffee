@@ -23,7 +23,7 @@ class FileAdaptor
 
         data = JSON.stringify json
         #when save is done call callback
-        fs.writeFile @fileName, 'utf8', data, (err, data) ->
+        fs.writeFile @fileName, data, (err, data) ->
             if err then cb err else cb()
 
     # saveAuthItem: (item, oldName, cb) ->
