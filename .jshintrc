@@ -1,0 +1,11 @@
+{
+  "laxcomma": true,
+  "globals": { 
+    "require": false,
+    "__dirname": false,
+    "describe": false,
+    "it": false
+  },
+  "asi": true,
+  "node": true
+}
