@@ -4,7 +4,7 @@
   "description": "A Simple role based access control implementation for node",
   "main": "index.js",
   "scripts": {
-    "test": "",
+    "test": "node_modules/.bin/mocha --reporter spec test/**/*",
     "jshint": "node_modules/.bin/jshint ."
   },
   "repository": "git@github.com:digitalsadhu/admittance.git",
