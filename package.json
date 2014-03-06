@@ -1,10 +1,10 @@
 {
   "name": "admittance",
-  "version": "0.0.3",
-  "description": "Role based access control implementation for node",
+  "version": "2.0.0",
+  "description": "A Simple role based access control implementation for node",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/test.coffee --compilers coffee:coffee-script",
+    "test": "",
     "jshint": "node_modules/.bin/jshint ."
   },
   "repository": "git@github.com:digitalsadhu/admittance.git",
@@ -17,14 +17,10 @@
     "auth"
   ],
   "author": "Richard Walker",
-  "license": "BSD",
-  "dependencies": {
-    "underscore": "1.4.4",
+  "license": "MIT",
+  "devDependencies": {
     "mocha": "1.12.0",
     "chai": "1.7.2",
-    "coffee-script": "1.6.3"
-  },
-  "devDependencies": {
     "jshint": "~2.4.4"
   }
 }
