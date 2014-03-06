@@ -1,14 +1,10 @@
 'use strict';
 
-var fs              = require('fs')
-  , admittance      = require('admittance')
+var permissionData  = require('permissions.json')
+  , admittance      = require('.admittance.js')
  
-//read from the text file where we store pairs of user ids and permissions
-var storeR = fs.createReadStream(__dirname + '/my-store.txt')
- 
-//read in permissions
-storeR.pipe(admittance)
- 
+admittance.load(permissionData);
+
 var userid = 1;
 
 //do a permissions check
