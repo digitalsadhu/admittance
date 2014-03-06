@@ -1,0 +1,9 @@
+{
+  "laxcomma": true,
+  "globals": { 
+    "require": false,
+    "__dirname": false
+  },
+  "asi": true,
+  "node": true
+}
