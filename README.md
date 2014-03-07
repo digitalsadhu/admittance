@@ -6,7 +6,7 @@ This is a rewrite of the original incomplete V1 version of admittance. I decided
 
 Admittance now reads permissions from plain old javascript objects. This, I think helps to keep the module doing just one thing. To load data you just need create javascript objects and store them somewhere. You could simply require a json file and load it. This also makes it very easy to work with a nosql db. Just get and set your permissions to the db.
 
-## Usage
+## Basic usage
 
 ```js
 var admittance = require('admittance')
@@ -23,29 +23,7 @@ admittance(2).is('admin') //false!
 
 ```
 
-## Permissions format
-
-Admittance expects a simple map from userids to permissions. Permissions are strings or array of strings. The strings are simply permission names that make sense for your application context.
-
-example:
-
-```js
-var permissions = {
-  1: 'admin',
-  2: ['admin', 'subscriber', 'editor'],
-  3: 'editor'
-}
-```
-
-## Tests
-
-```
-npm test
-```
-
-## Next steps
-
-The permissions format needs to accept parent/child entries, and admittance checking needs to then handle those changes eg:
+## Permission hierarchy usage
 
 ```js
 var permissions = {
@@ -64,4 +42,34 @@ admittance(1).is('subscriber') //true
 admittance(1).is('editor') //true
 
 admittance(1).is('blogger') //true
+```
+
+## Permissions format
+
+Admittance expects a simple map from userids to permissions. Permissions are strings or array of strings. The strings are simply permission names that make sense for your application context.
+
+example:
+
+```js
+var permissions = {
+  1: 'admin',
+  2: ['admin', 'subscriber', 'editor'],
+  3: 'editor'
+}
+```
+
+You can define nested hierarchies as well
+
+```js
+var permissions = {
+  'admin': ['subscriber', 'editor'], //any userid assigned admin will also pass a subscriber or editor check
+  'editor': 'blogger', //any userid assigned editor will also pass a blogger check
+  1: 'admin'
+}
+
+
+## Tests
+
+```
+npm test
 ```
