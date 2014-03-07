@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/digitalsadhu/admittance.png?branch=master)](https://travis-ci.org/digitalsadhu/admittance)
+
 # Admittance (Version 2)
 
 This is a rewrite of the original incomplete V1 version of admittance. I decided that V1 was trying to do too much and that V2 should be as simple as possible, both in API and in what it actually does under the hood.
