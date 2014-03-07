@@ -9,8 +9,8 @@
     "coveralls": "./scripts/coveralls.sh"
   },
   "repository": {
-    "type" : "git",
-    "url" : "git@github.com:digitalsadhu/admittance.git"
+    "type": "git",
+    "url": "git@github.com:digitalsadhu/admittance.git"
   },
   "keywords": [
     "rbac",
@@ -24,7 +24,9 @@
   "contributors": [],
   "homepage": "https://github.com/digitalsadhu/admittance",
   "dependencies": {},
-  "engines": { "node" : ">=0.6 <0.12" },
+  "engines": {
+    "node": ">=0.6 <0.12"
+  },
   "author": "Richard Walker <digitalsadhu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
@@ -32,6 +34,7 @@
     "chai": "1.7.2",
     "jshint": "~2.4.4",
     "istanbul": "~0.2.6",
-    "coveralls": "~2.8.0"
+    "coveralls": "~2.8.0",
+    "rewire": "~2.0.0"
   }
 }
