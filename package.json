@@ -2,13 +2,16 @@
   "name": "admittance",
   "version": "2.0.1",
   "description": "A Simple role based access control implementation for node",
-  "main": "index.js",
+  "main": "admittance.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec test/**/*",
     "jshint": "node_modules/.bin/jshint .",
     "coveralls": "./scripts/coveralls.sh"
   },
-  "repository": "git@github.com:digitalsadhu/admittance.git",
+  "repository": {
+    "type" : "git",
+    "url" : "git@github.com:digitalsadhu/admittance.git"
+  },
   "keywords": [
     "rbac",
     "access control",
@@ -17,7 +20,12 @@
     "permissions",
     "auth"
   ],
-  "author": "Richard Walker",
+  "bugs": "https://github.com/digitalsadhu/admittance/issues",
+  "contributors": [],
+  "homepage": "https://github.com/digitalsadhu/admittance",
+  "dependencies": {},
+  "engines": { "node" : ">=0.6 <0.12" },
+  "author": "Richard Walker <digitalsadhu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "mocha": "1.12.0",
