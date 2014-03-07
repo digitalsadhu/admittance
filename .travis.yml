@@ -4,4 +4,7 @@ node_js:
   - "0.10"
   - "0.8"
   - "0.6"
+script:
+  - npm run jshint
+  - npm test
 after_success: npm run coveralls
