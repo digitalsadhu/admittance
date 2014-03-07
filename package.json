@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec test/**/*",
-    "jshint": "node_modules/.bin/jshint ."
+    "jshint": "node_modules/.bin/jshint .",
+    "coveralls": "./scripts/coveralls.sh"
   },
   "repository": "git@github.com:digitalsadhu/admittance.git",
   "keywords": [
@@ -21,6 +22,8 @@
   "devDependencies": {
     "mocha": "1.12.0",
     "chai": "1.7.2",
-    "jshint": "~2.4.4"
+    "jshint": "~2.4.4",
+    "istanbul": "~0.2.6",
+    "coveralls": "~2.8.0"
   }
 }
