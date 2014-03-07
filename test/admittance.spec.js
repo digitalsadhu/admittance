@@ -6,6 +6,8 @@ var expect      = require('chai').expect
 //do a permissions check
 describe('admittance', function () {
 
+  describe('checking permissions', function () {
+
   it('should return true when a user has a given permission', function () {
     admittance.load({1:'admin'});
     var userid = 1;
@@ -44,6 +46,8 @@ describe('admittance', function () {
     admittance.load({1: ['admin', 'subscriber']});
     var userid = 1;
     expect(admittance(userid).is()).to.equal(false);
+  })
+
   })
 
 })
