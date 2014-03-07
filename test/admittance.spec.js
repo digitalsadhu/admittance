@@ -30,7 +30,7 @@ describe('admittance', function () {
     admittance.load({1: ['admin', 'subscriber']});
     var userid;
     expect(admittance(userid).is('admin')).to.equal(false);
-    var userid = null;
+    userid = null;
     expect(admittance(userid).is('admin')).to.equal(false);
   })
 
