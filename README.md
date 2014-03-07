@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/digitalsadhu/admittance.png?branch=master)](https://travis-ci.org/digitalsadhu/admittance)
+[![Build Status](https://travis-ci.org/digitalsadhu/admittance.png?branch=master)](https://travis-ci.org/digitalsadhu/admittance) [![Coverage Status](https://coveralls.io/repos/digitalsadhu/admittance/badge.png)](https://coveralls.io/r/digitalsadhu/admittance)
 
 # Admittance (Version 2)
 
