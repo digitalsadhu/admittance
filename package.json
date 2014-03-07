@@ -1,6 +1,6 @@
 {
   "name": "admittance",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "A Simple role based access control implementation for node",
   "main": "admittance.js",
   "scripts": {
