@@ -1,7 +1,7 @@
 'use strict';
 
-var permissionData  = require('permissions.json')
-  , admittance      = require('.admittance.js')
+var permissionData  = require('./permissions.json')
+  , admittance      = require('./admittance.js')
  
 admittance.load(permissionData);
 
