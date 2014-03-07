@@ -66,10 +66,10 @@ var permissions = {
   'editor': 'blogger', //any userid assigned editor will also pass a blogger check
   1: 'admin'
 }
-
+```
 
 ## Tests
 
-```
+```js
 npm test
 ```
