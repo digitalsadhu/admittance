@@ -79,6 +79,15 @@ var admittance = function (userid) {
   return {
     is: function (permission) {
       return checkAccess(userid, permission)
+    },
+    isnt: function (permission) {
+      return !checkAccess(userid, permission)
+    },
+    can: function (permission) {
+      return checkAccess(userid, permission)
+    },
+    cant: function (permission) {
+      return !checkAccess(userid, permission)
     }
   }
 }
