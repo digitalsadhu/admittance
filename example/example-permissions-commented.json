@@ -1,0 +1,49 @@
+{
+  //Permissions structure. This is simple a key for a parent permission and
+  //a value (either string or array) representing children permission(s)
+
+  //"user" has children "readPosts" and "listPosts" which means a user can read
+  //and list posts
+  "user": [
+    "readPosts",
+    "listPosts"
+  ],
+
+  //"editor" has children "editPosts" and "deletePosts" and "user".
+  //An editor can edit and delete posts as well as do anything a user can.
+  //(In this case can read and list posts)
+  "editor": [
+    "user",
+    "editPosts",
+    "deletePosts"
+  ],
+
+  //"admin" is the parent of "editor" with the extra permission "manageUsers"
+  "admin": [
+    "manageUsers",
+    "editor"
+  ],
+
+  //"superadmin" is an alias for admin since they essentially have the exact
+  //same permissions
+  "superadmin": "admin",
+
+  //"reportViewer" is a separate permission with no direct relationship to
+  //the other permissions
+  "reportViewer": [
+    "readReports",
+    "listReports"
+  ],
+
+  //Assigning permissions to users.
+  //Based on the above hierarchy we can assign permissions to given user ids
+
+  //userid "1" is an "admin" and a "reportViewer"
+  "1": ["admin", "reportViewer"],
+
+  //userid "2" is an "editor"
+  "2": "admin",
+
+  //userid "3" is a "user"
+  "3": "user"
+}

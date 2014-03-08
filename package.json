@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec test/**/*",
     "jshint": "node_modules/.bin/jshint .",
-    "coveralls": "./scripts/coveralls.sh"
+    "coveralls": "./scripts/coveralls.sh",
+    "example": "node example/example.js"
   },
   "repository": {
     "type": "git",
