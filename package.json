@@ -8,7 +8,8 @@
     "jshint": "node_modules/.bin/jshint .",
     "istanbul": "./scripts/istanbul.sh",
     "coveralls": "./scripts/coveralls.sh",
-    "example": "node example/example.js"
+    "example": "node example/example.js",
+    "check": "npm run jshint && npm run istanbul"
   },
   "repository": {
     "type": "git",
