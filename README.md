@@ -21,10 +21,27 @@ Admittance now reads permissions from plain old javascript objects. This, I thin
 <a name="usage"></a>
 ## Usage
 
+### Super basic usage
+
+```js
+var admittance = require('admittance')
+
+var permissions = {
+  1: 'admin'
+}
+
+admittance.load(permissions)
+
+admittance(1).is('admin') //true
+admittance(1).isnt('admin') //false
+```
+
+### Full featured usage
+
 ```js
 //require admittance and example json permissions file
-var permissionData  = require('./example-permissions.json')
-  , admittance      = require('../admittance.js')
+var permissionData  = require('/some/example/permissions.json')
+  , admittance      = require('admittance')
 
 //load in permissions from json permissions file. This could easily be loaded
 //from a db instead
