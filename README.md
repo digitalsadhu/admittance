@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/digitalsadhu/admittance.png?branch=master)](https://travis-ci.org/digitalsadhu/admittance) [![Coverage Status](https://coveralls.io/repos/digitalsadhu/admittance/badge.png)](https://coveralls.io/r/digitalsadhu/admittance)
 
-[![NPM](https://nodei.co/npm/admittance.png?mini=true)](https://nodei.co/npm/admittance/)
+[![NPM](https://nodei.co/npm/admittance.png?compact=true)](https://nodei.co/npm/admittance/)
 
 # Admittance (Version 2)
 
