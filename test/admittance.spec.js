@@ -166,6 +166,29 @@ describe('admittance', function () {
 
   })
 
+  describe('#getDirectPermissionChildren method', function () {
+
+    it('should return immediate children for given permission', function () {
+
+      var getDirectPermissionChildren = admitRewire.__get__('getDirectPermissionChildren')
+        , directPermissions
+        , permissions                 = {
+        'admin': 'editor',
+        'editor': 'subscriber',
+        'superadmin': ['admin', 'user']
+      }
+
+      admitRewire.load(permissions)
+
+      directPermissions = getDirectPermissionChildren('superadmin')
+      expect(directPermissions).to.contain('admin');
+      expect(directPermissions).to.contain('user');
+      expect(directPermissions).not.to.contain('editor');
+
+    })
+
+  })
+
   describe('#checkAccess method', function () {
 
     it('should return true if a given user has (directly or indirectly) a given permission', function () {
@@ -183,6 +206,45 @@ describe('admittance', function () {
 
       expect(checkAccess(2, 'superadmin')).to.equal(true)
 
+    })
+
+  })
+
+  describe('#isnt method', function () {
+
+    it('should return true if a given user does not have a given permission',
+      function () {
+      admitRewire.load({1: 'admin'})
+      expect(admittance(1).isnt('editor')).to.equal(true)
+    })
+
+  })
+
+  describe('#can method', function () {
+    it('should return true when a user has a given permission', function () {
+      admittance.load({1:'edit'});
+      var userid = 1;
+      expect(admittance(userid).can('edit')).to.equal(true);
+    })
+  })
+
+  describe('#cant method', function () {
+
+    it('should return true if a given user does not have a given permission',
+      function () {
+      admitRewire.load({1: 'admin'})
+      expect(admittance(1).cant('editor')).to.equal(true)
+    })
+
+  })
+
+  describe('#load method', function () {
+
+    it('should load a permissions object',
+      function () {
+      admitRewire.load({1: 'admin'})
+      expect(admitRewire.__get__('permissions')).to.be.an('object')
+      expect(admitRewire.__get__('permissions')['1']).to.equal('admin')
     })
 
   })
