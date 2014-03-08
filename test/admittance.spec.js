@@ -11,43 +11,43 @@ describe('admittance', function () {
   describe('checking permissions', function () {
 
     it('should return true when a user has a given permission', function () {
-      admittance.load({1:'admin'});
-      var userid = 1;
-      expect(admittance(userid).is('admin')).to.equal(true);
+      admittance.load({1:'admin'})
+      var userid = 1
+      expect(admittance(userid).is('admin')).to.equal(true)
     })
 
     it('should return false when a user does not have a given permission', function () {
-      admittance.load({1: 'admin'});
-      var userid = 1;
-      expect(admittance(userid).is('monkey')).to.equal(false);
+      admittance.load({1: 'admin'})
+      var userid = 1
+      expect(admittance(userid).is('monkey')).to.equal(false)
     })
 
     it('should return true when a user has several permissions assigned', function () {
-      admittance.load({1: ['admin', 'subscriber']});
-      var userid = 1;
-      expect(admittance(userid).is('admin')).to.equal(true);
-      expect(admittance(userid).is('subscriber')).to.equal(true);
-      expect(admittance(userid).is('monkey')).to.equal(false);
+      admittance.load({1: ['admin', 'subscriber']})
+      var userid = 1
+      expect(admittance(userid).is('admin')).to.equal(true)
+      expect(admittance(userid).is('subscriber')).to.equal(true)
+      expect(admittance(userid).is('monkey')).to.equal(false)
     })
 
     it('should return false if userid is undefined or null', function () {
-      admittance.load({1: ['admin', 'subscriber']});
-      var userid;
-      expect(admittance(userid).is('admin')).to.equal(false);
-      userid = null;
-      expect(admittance(userid).is('admin')).to.equal(false);
+      admittance.load({1: ['admin', 'subscriber']})
+      var userid
+      expect(admittance(userid).is('admin')).to.equal(false)
+      userid = null
+      expect(admittance(userid).is('admin')).to.equal(false)
     })
 
     it('should return false if permission is empty', function () {
-      admittance.load({1: ['admin', 'subscriber']});
-      var userid = 1;
-      expect(admittance(userid).is('')).to.equal(false);
+      admittance.load({1: ['admin', 'subscriber']})
+      var userid = 1
+      expect(admittance(userid).is('')).to.equal(false)
     })
 
     it('should return false if is is called with no parameter', function () {
-      admittance.load({1: ['admin', 'subscriber']});
-      var userid = 1;
-      expect(admittance(userid).is()).to.equal(false);
+      admittance.load({1: ['admin', 'subscriber']})
+      var userid = 1
+      expect(admittance(userid).is()).to.equal(false)
     })
 
   })
@@ -59,9 +59,9 @@ describe('admittance', function () {
         'admin': 'subscriber',
         1: 'admin'
       }
-      admittance.load(permissions);
-      var userid = 1;
-      expect(admittance(userid).is('subscriber')).to.equal(true);
+      admittance.load(permissions)
+      var userid = 1
+      expect(admittance(userid).is('subscriber')).to.equal(true)
     })
 
   })
@@ -156,11 +156,11 @@ describe('admittance', function () {
       admitRewire.load(permissions)
 
       userPermissions = getUserPermissions(1)
-      expect(userPermissions).to.contain('editor');
-      expect(userPermissions).not.to.contain('admin');
+      expect(userPermissions).to.contain('editor')
+      expect(userPermissions).not.to.contain('admin')
 
       userPermissions = getUserPermissions(2)
-      expect(userPermissions).to.contain('superadmin');
+      expect(userPermissions).to.contain('superadmin')
 
     })
 
@@ -181,9 +181,9 @@ describe('admittance', function () {
       admitRewire.load(permissions)
 
       directPermissions = getDirectPermissionChildren('superadmin')
-      expect(directPermissions).to.contain('admin');
-      expect(directPermissions).to.contain('user');
-      expect(directPermissions).not.to.contain('editor');
+      expect(directPermissions).to.contain('admin')
+      expect(directPermissions).to.contain('user')
+      expect(directPermissions).not.to.contain('editor')
 
     })
 
@@ -222,9 +222,9 @@ describe('admittance', function () {
 
   describe('#can method', function () {
     it('should return true when a user has a given permission', function () {
-      admittance.load({1:'edit'});
-      var userid = 1;
-      expect(admittance(userid).can('edit')).to.equal(true);
+      admittance.load({1:'edit'})
+      var userid = 1
+      expect(admittance(userid).can('edit')).to.equal(true)
     })
   })
 
