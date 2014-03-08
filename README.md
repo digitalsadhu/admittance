@@ -80,7 +80,7 @@ Admittance expects a simple map from userids to permissions. Permissions are str
 
 example:
 
-```json
+```js
 {
   //Permissions structure. This is simple a key for a parent permission and
   //a value (either string or array) representing children permission(s)
@@ -136,25 +136,31 @@ example:
 ## API
 
 `admittance.load(object)`
+
 Load permissions from a js object. See the "Writing permissions" section above
 for how to write a permissions object
 
 `admittance(id).is(permission)`
+
 Test if a given 'id' can be matched with given 'permission'
 
 `admittance(id).isnt(permission)`
-Opposite of is. 
+
+Opposite of is. Equivalent of writing `!admittance(id).is(permission)`
 
 `admittance(id).can(permission)`
+
 Alias for is
 
 `admittance(id).cant(permission)`
+
 Alias for isnt
 
 <a name="tests"></a>
 ## Tests
 
 ```js
+npm install
 npm test
 ```
 
@@ -162,5 +168,6 @@ npm test
 ## Example (see it in action by running the example)
 
 ```js
+npm install
 npm run example
 ```
