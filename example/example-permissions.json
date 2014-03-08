@@ -1,0 +1,23 @@
+{
+  "user": [
+    "readPosts",
+    "listPosts"
+  ],
+  "editor": [
+    "user",
+    "editPosts",
+    "deletePosts"
+  ],
+  "admin": [
+    "manageUsers",
+    "editor"
+  ],
+  "superadmin": "admin",
+  "reportViewer": [
+    "readReports",
+    "listReports"
+  ],
+  "1": ["admin", "reportViewer"],
+  "2": "admin",
+  "3": "user"
+}

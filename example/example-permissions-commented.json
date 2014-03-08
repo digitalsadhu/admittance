@@ -2,20 +2,20 @@
   //Permissions structure. This is simple a key for a parent permission and
   //a value (either string or array) representing children permission(s)
 
-  //"user" has children "canReadPost" and "canListPosts". A user can read
-  //posts and list posts
+  //"user" has children "readPosts" and "listPosts" which means a user can read
+  //and list posts
   "user": [
-    "canReadPosts",
-    "canListPosts"
+    "readPosts",
+    "listPosts"
   ],
 
-  //"editor" has children "canEditPosts" and "canDeletePosts" and "user".
+  //"editor" has children "editPosts" and "deletePosts" and "user".
   //An editor can edit and delete posts as well as do anything a user can.
-  //(In this can read and list posts)
+  //(In this case can read and list posts)
   "editor": [
     "user",
-    "canEditPosts",
-    "canDeletePosts"
+    "editPosts",
+    "deletePosts"
   ],
 
   //"admin" is the parent of "editor" with the extra permission "manageUsers"
@@ -31,8 +31,8 @@
   //"reportViewer" is a separate permission with no direct relationship to
   //the other permissions
   "reportViewer": [
-    "canReadReports",
-    "canListReports"
+    "readReports",
+    "listReports"
   ],
 
   //Assigning permissions to users.
