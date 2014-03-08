@@ -6,7 +6,7 @@ var permissionData  = require('./example-permissions.json')
 
 //load in permissions from json permissions file. This could easily be loaded
 //from a db instead
-admittance.load(permissionData);
+admittance.load(permissionData)
 
 //alias admittance as user for readability
 var user = admittance;
