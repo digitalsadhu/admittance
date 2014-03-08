@@ -48,7 +48,7 @@ var permissionData  = require('/some/example/permissions.json')
 admittance.load(permissionData)
 
 //alias admittance as user for readability
-var user = admittance;
+var user = admittance
 
 //do permissions checks
 
