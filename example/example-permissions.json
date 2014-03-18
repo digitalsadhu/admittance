@@ -16,8 +16,5 @@
   "reportViewer": [
     "readReports",
     "listReports"
-  ],
-  "1": ["admin", "reportViewer"],
-  "2": "admin",
-  "3": "user"
+  ]
 }
