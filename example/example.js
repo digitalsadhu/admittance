@@ -2,11 +2,12 @@
 
 //require admittance and example json permissions file
 var permissionData  = require('./example-permissions.json')
+  , assignmentData  = require('./example-assignments.json')
   , admittance      = require('../admittance.js')
 
 //load in permissions from json permissions file. This could easily be loaded
 //from a db instead
-admittance.load(permissionData)
+admittance.load(permissionData, assignmentData)
 
 //alias admittance as user for readability
 var user = admittance;

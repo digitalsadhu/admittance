@@ -35,15 +35,4 @@
     "listReports"
   ],
 
-  //Assigning permissions to users.
-  //Based on the above hierarchy we can assign permissions to given user ids
-
-  //userid "1" is an "admin" and a "reportViewer"
-  "1": ["admin", "reportViewer"],
-
-  //userid "2" is an "editor"
-  "2": "admin",
-
-  //userid "3" is a "user"
-  "3": "user"
 }

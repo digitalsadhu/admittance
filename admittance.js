@@ -3,6 +3,7 @@
 var util = require('util')
 
 var permissions = {}
+  , assignments = {}
 
 var getDirectChildren = function (parent) {
 
@@ -17,7 +18,13 @@ var getDirectChildren = function (parent) {
 
 var getUserPermissions = function (userid) {
 
-  return getDirectChildren(userid)
+  var assigns = assignments[userid]
+
+  if (typeof assigns === 'undefined' || assigns === null) assigns = []
+
+  if (!util.isArray(assigns)) assigns = [assigns]
+
+  return assigns
 
 }
 
@@ -92,7 +99,8 @@ var admittance = function (userid) {
   }
 }
 
-admittance.load = function (permissionData) {
+admittance.load = function (permissionData, assignmentData) {
+  assignments = assignmentData
   permissions = permissionData
 }
 

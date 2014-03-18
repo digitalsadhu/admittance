@@ -11,19 +11,19 @@ describe('admittance', function () {
   describe('checking permissions', function () {
 
     it('should return true when a user has a given permission', function () {
-      admittance.load({1:'admin'})
+      admittance.load({}, {1:'admin'})
       var userid = 1
       expect(admittance(userid).is('admin')).to.equal(true)
     })
 
     it('should return false when a user does not have a given permission', function () {
-      admittance.load({1: 'admin'})
+      admittance.load({}, {1: 'admin'})
       var userid = 1
       expect(admittance(userid).is('monkey')).to.equal(false)
     })
 
     it('should return true when a user has several permissions assigned', function () {
-      admittance.load({1: ['admin', 'subscriber']})
+      admittance.load({}, {1: ['admin', 'subscriber']})
       var userid = 1
       expect(admittance(userid).is('admin')).to.equal(true)
       expect(admittance(userid).is('subscriber')).to.equal(true)
@@ -31,7 +31,7 @@ describe('admittance', function () {
     })
 
     it('should return false if userid is undefined or null', function () {
-      admittance.load({1: ['admin', 'subscriber']})
+      admittance.load({}, {1: ['admin', 'subscriber']})
       var userid
       expect(admittance(userid).is('admin')).to.equal(false)
       userid = null
@@ -39,13 +39,13 @@ describe('admittance', function () {
     })
 
     it('should return false if permission is empty', function () {
-      admittance.load({1: ['admin', 'subscriber']})
+      admittance.load({}, {1: ['admin', 'subscriber']})
       var userid = 1
       expect(admittance(userid).is('')).to.equal(false)
     })
 
     it('should return false if is is called with no parameter', function () {
-      admittance.load({1: ['admin', 'subscriber']})
+      admittance.load({}, {1: ['admin', 'subscriber']})
       var userid = 1
       expect(admittance(userid).is()).to.equal(false)
     })
@@ -56,10 +56,9 @@ describe('admittance', function () {
 
     it('should return true if a user has been assigned a parent permission of a checked permission', function () {
       var permissions = {
-        'admin': 'subscriber',
-        1: 'admin'
+        'admin': 'subscriber'
       }
-      admittance.load(permissions)
+      admittance.load(permissions, {1: 'admin'})
       var userid = 1
       expect(admittance(userid).is('subscriber')).to.equal(true)
     })
@@ -148,12 +147,15 @@ describe('admittance', function () {
         , permissions         = {
         'admin': 'editor',
         'editor': 'subscriber',
-        'superadmin': ['admin', 'user'],
+        'superadmin': ['admin', 'user']
+      }
+
+      var assignments = {
         1: 'editor',
         2: 'superadmin'
       }
 
-      admitRewire.load(permissions)
+      admitRewire.load(permissions, assignments)
 
       userPermissions = getUserPermissions(1)
       expect(userPermissions).to.contain('editor')
@@ -197,12 +199,15 @@ describe('admittance', function () {
         , permissions   = {
         'admin': 'editor',
         'editor': 'subscriber',
-        'superadmin': ['admin', 'user'],
+        'superadmin': ['admin', 'user']
+      }
+
+      var assignments = {
         1: 'editor',
         2: 'superadmin'
       }
 
-      admitRewire.load(permissions)
+      admitRewire.load(permissions, assignments)
 
       expect(checkAccess(2, 'superadmin')).to.equal(true)
 
@@ -214,7 +219,7 @@ describe('admittance', function () {
 
     it('should return true if a given user does not have a given permission',
       function () {
-      admitRewire.load({1: 'admin'})
+      admitRewire.load({}, {1: 'admin'})
       expect(admittance(1).isnt('editor')).to.equal(true)
     })
 
@@ -222,7 +227,7 @@ describe('admittance', function () {
 
   describe('#can method', function () {
     it('should return true when a user has a given permission', function () {
-      admittance.load({1:'edit'})
+      admittance.load({}, {1:'edit'})
       var userid = 1
       expect(admittance(userid).can('edit')).to.equal(true)
     })
@@ -232,7 +237,7 @@ describe('admittance', function () {
 
     it('should return true if a given user does not have a given permission',
       function () {
-      admitRewire.load({1: 'admin'})
+      admitRewire.load({}, {1: 'admin'})
       expect(admittance(1).cant('editor')).to.equal(true)
     })
 
@@ -240,11 +245,11 @@ describe('admittance', function () {
 
   describe('#load method', function () {
 
-    it('should load a permissions object',
+    it('should load a permissions object and an assignments object',
       function () {
-      admitRewire.load({1: 'admin'})
-      expect(admitRewire.__get__('permissions')).to.be.an('object')
-      expect(admitRewire.__get__('permissions')['1']).to.equal('admin')
+      admitRewire.load({'admin': 'subscriber'}, {1: 'admin'})
+      expect(admitRewire.__get__('permissions').admin).to.equal('subscriber')
+      expect(admitRewire.__get__('assignments')['1']).to.equal('admin')
     })
 
   })
