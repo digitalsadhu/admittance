@@ -172,7 +172,7 @@ example:
   "3": "user"
 
 }
-
+```
 <a name="api"></a>
 ## API
 
