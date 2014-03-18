@@ -2,11 +2,12 @@
 
 [![NPM](https://nodei.co/npm/admittance.png?compact=true)](https://nodei.co/npm/admittance/)
 
-# Admittance (Version 2)
+# Admittance
 
 * <a href="#intro">Intro</a>
 * <a href="#usage">Usage</a>
 * <a href="#writing-permissions">Writing permissions</a>
+* <a href="#writing-assignments">Writing assignments</a>
 * <a href="#api">API</a>
 * <a href="#tests">Tests</a>
 * <a href="#example">Example</a>
@@ -27,10 +28,14 @@ Admittance now reads permissions from plain old javascript objects. This, I thin
 var admittance = require('admittance')
 
 var permissions = {
+  'admin': 'subscriber'
+}
+
+var assignments = {
   1: 'admin'
 }
 
-admittance.load(permissions)
+admittance.load(permissions, assignments)
 
 admittance(1).is('admin') //true
 admittance(1).isnt('admin') //false
@@ -41,11 +46,12 @@ admittance(1).isnt('admin') //false
 ```js
 //require admittance and example json permissions file
 var permissionData  = require('/some/example/permissions.json')
+  , assignmentData  = require('/some/example/assignments.json')
   , admittance      = require('admittance')
 
 //load in permissions from json permissions file. This could easily be loaded
 //from a db instead
-admittance.load(permissionData)
+admittance.load(permissionData, assignmentData)
 
 //alias admittance as user for readability
 var user = admittance
@@ -95,7 +101,10 @@ if (user(1).cant('eatCake'))
 <a name="writing-permissions"></a>
 ## Writing permissions
 
-Admittance expects a simple map from userids to permissions. Permissions are strings or array of strings. The strings are simply permission names that make sense for your application context.
+Permissions are strings or an array of strings. The strings are simply permission names that make sense for your application context. Permissions can be parents for other permissions and they in turn
+can be parents to further permissions etc. Define these hierarchies however you see fit.
+When it comes time to check, admittance with traverse your permission hierarchy to determine
+if a given user has a given permission.
 
 example:
 
@@ -135,10 +144,23 @@ example:
   "reportViewer": [
     "readReports",
     "listReports"
-  ],
+  ]
 
+}
+```
+
+<a name="writing-assignments"></a>
+## Writing assignments
+
+Admittance expects a simple map from userids to permissions (defined in permissions map)
+A userid can be assigned a single permission string or an array of permissions strings.
+
+example:
+
+```js
+{
   //Assigning permissions to users.
-  //Based on the above hierarchy we can assign permissions to given user ids
+  //Based on the permissions hierarchy we can assign permissions to given user ids
 
   //userid "1" is an "admin" and a "reportViewer"
   "1": ["admin", "reportViewer"],
@@ -148,16 +170,17 @@ example:
 
   //userid "3" is a "user"
   "3": "user"
+
 }
-```
 
 <a name="api"></a>
 ## API
 
-`admittance.load(object)`
+`admittance.load(permissionsobject, assignmentsobject)`
 
-Load permissions from a js object. See the "Writing permissions" section above
-for how to write a permissions object
+Load permissions and assignments from js objects. See the "Writing permissions" 
+and "Writing assignments" sections above
+for how to write a permissions and assignments object
 
 `admittance(id).is(permission)`
 
