@@ -210,6 +210,8 @@ describe('admittance', function () {
       function () {
       var user = admittance({}, {1: 'admin'})
       expect(user(1).isnt('editor')).to.equal(true)
+      expect(user(1).isnt('admin', 2)).to.equal(true)
+      expect(user(1).isnt('admin', 1)).to.equal(false)
     })
 
   })
@@ -228,6 +230,8 @@ describe('admittance', function () {
       function () {
       var user = admittance({}, {1: 'admin'})
       expect(user(1).cant('editor')).to.equal(true)
+      expect(user(1).cant('admin', 2)).to.equal(true)
+      expect(user(1).cant('admin', 1)).to.equal(false)
     })
 
   })
@@ -241,6 +245,41 @@ describe('admittance', function () {
       var user2 = admittance({}, {1: 'user'})
       expect(user2(1).is('user')).to.equal(true)
     })
+  })
+
+  describe('business rule checking', function () {
+
+    it('should behave as normal if no matchingId param is provided', function () {
+      var user = admittance({}, {1: 'admin'})
+      expect(user(1).is('admin')).to.equal(true)
+    })
+
+    it('should verify that ids match if matchingId param is provided', function () {
+
+      var user = admittance({}, {1: 'admin'})
+      expect(user(1).is('admin', 1)).to.equal(true)
+      expect(user(1).is('admin', 2)).to.equal(false)
+    })
+
+    describe('#checkMatchingIds function', function () {
+
+      it('should return true if matchingId resolves to false', function () {
+        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
+        expect(checkMatchingIds(1)).to.equal(true)
+      })
+
+      it('should return true if matchingId matches userid', function () {
+        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
+        expect(checkMatchingIds(1, 1)).to.equal(true)
+      })
+
+      it('should return false if matchingId doesnt match userid', function () {
+        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
+        expect(checkMatchingIds(1, 2)).to.equal(false)
+      })
+
+    })
+
   })
 
 })

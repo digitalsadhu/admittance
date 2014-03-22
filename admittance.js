@@ -54,20 +54,35 @@ var checkAccess = function (permissions, assignments, userid, permission) {
   return false
 }
 
+var checkMatchingIds = function (userid, matchingId) {
+  var matchingIds = true;
+  if (matchingId)
+    matchingIds = (parseInt(matchingId, 10) === parseInt(userid, 10))
+  return matchingIds
+}
+
 var admittance = function (permissions, assignments) {
   return function (userid) {
     return {
-      is: function (permission) {
-        return checkAccess(permissions, assignments, userid, permission)
+      is: function (permission, matchingId) {
+        var access = checkAccess(permissions, assignments, userid, permission)
+        var matchingIds = checkMatchingIds(userid, matchingId)
+        return access && matchingIds
       },
-      isnt: function (permission) {
-        return !checkAccess(permissions, assignments, userid, permission)
+      isnt: function (permission, matchingId) {
+        var access = checkAccess(permissions, assignments, userid, permission)
+        var matchingIds = checkMatchingIds(userid, matchingId)
+        return !access || !matchingIds
       },
-      can: function (permission) {
-        return checkAccess(permissions, assignments, userid, permission)
+      can: function (permission, matchingId) {
+        var access = checkAccess(permissions, assignments, userid, permission)
+        var matchingIds = checkMatchingIds(userid, matchingId)
+        return access && matchingIds
       },
-      cant: function (permission) {
-        return !checkAccess(permissions, assignments, userid, permission)
+      cant: function (permission, matchingId) {
+        var access = checkAccess(permissions, assignments, userid, permission)
+        var matchingIds = checkMatchingIds(userid, matchingId)
+        return !access || !matchingIds
       }
     }
   }
