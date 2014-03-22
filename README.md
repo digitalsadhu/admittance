@@ -35,10 +35,10 @@ var assignments = {
   1: 'admin'
 }
 
-admittance.load(permissions, assignments)
+var user = admittance(permissions, assignments)
 
-admittance(1).is('admin') //true
-admittance(1).isnt('admin') //false
+user(1).is('admin') //true
+user(1).isnt('admin') //false
 ```
 
 ### Full featured usage
@@ -51,10 +51,7 @@ var permissionData  = require('/some/example/permissions.json')
 
 //load in permissions from json permissions file. This could easily be loaded
 //from a db instead
-admittance.load(permissionData, assignmentData)
-
-//alias admittance as user for readability
-var user = admittance
+var user = admittance(permissionData, assignmentData)
 
 //do permissions checks
 
@@ -176,25 +173,26 @@ example:
 <a name="api"></a>
 ## API
 
-`admittance.load(permissionsobject, assignmentsobject)`
+`admittance(permissionsobject, assignmentsobject)`
 
-Load permissions and assignments from js objects. See the "Writing permissions" 
-and "Writing assignments" sections above
+Load permissions and assignments from js objects and return an admittance instance. See the "Writing permissions" and "Writing assignments" sections above
 for how to write a permissions and assignments object
 
-`admittance(id).is(permission)`
+Admittance instance methods: (returned from admittance method)
+
+`is(permission)`
 
 Test if a given 'id' can be matched with given 'permission'
 
-`admittance(id).isnt(permission)`
+`isnt(permission)`
 
 Opposite of is. Equivalent of writing `!admittance(id).is(permission)`
 
-`admittance(id).can(permission)`
+`can(permission)`
 
 Alias for is
 
-`admittance(id).cant(permission)`
+`cant(permission)`
 
 Alias for isnt
 
