@@ -202,7 +202,7 @@ Parameters:
 
 Returns:
 
-- `<function>` - A function with is, isnt, can and cant methods populated with userid
+- `<function>` - A function with `is`, `isnt`, `can` and `cant` methods populated with userid
 
 Example:
 
