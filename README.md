@@ -180,12 +180,12 @@ for how to write a permissions and assignments object
 
 Parameters:
 
-- permissions <object>
-- assignments <object>
+- permissions `<object>`
+- assignments `<object>`
 
 Returns:
 
-- admittance <function>
+- admittance `<function>`
 
 Example:
 
@@ -198,11 +198,11 @@ var admittance = admittanceModule(permissionsObject, assignmentObject)
 
 Parameters:
 
-- userid <string|int>
+- userid `<string|int>`
 
 Returns:
 
-- <function> - A function with is, isnt, can and cant methods populated with userid
+- `<function>` - A function with is, isnt, can and cant methods populated with userid
 
 Example:
 
@@ -217,11 +217,11 @@ Test if a given 'id' can be matched with given 'permission'
 
 Parameters:
 
-- permission <string>
+- permission `<string>`
 
 Returns:
 
-- <boolean>
+- `<boolean>`
 
 Example:
 
@@ -235,11 +235,11 @@ Opposite of `is`. Equivalent of writing `!admittance(id).is(permission)`
 
 Parameters:
 
-- permission <string>
+- permission `<string>`
 
 Returns:
 
-- <boolean>
+- `<boolean>`
 
 Example:
 
@@ -253,11 +253,11 @@ Alias for `is`
 
 Parameters:
 
-- permission <string>
+- permission `<string>`
 
 Returns:
 
-- <boolean>
+- `<boolean>`
 
 Example:
 
@@ -271,11 +271,11 @@ Alias for `isnt`
 
 Parameters:
 
-- permission <string>
+- permission `<string>`
 
 Returns:
 
-- <boolean>
+- `<boolean>`
 
 Example:
 
