@@ -173,28 +173,115 @@ example:
 <a name="api"></a>
 ## API
 
-`admittance(permissionsobject, assignmentsobject)`
+### admittanceModule(permissionsobject, assignmentsobject)
 
 Load permissions and assignments from js objects and return an admittance instance. See the "Writing permissions" and "Writing assignments" sections above
 for how to write a permissions and assignments object
 
-Admittance instance methods: (returned from admittance method)
+Parameters:
 
-`is(permission)`
+- permissions <object>
+- assignments <object>
+
+Returns:
+
+- admittance <function>
+
+Example:
+
+```js
+var admittanceModule = require('admittance')
+var admittance = admittanceModule(permissionsObject, assignmentObject)
+```
+
+### admittance(userid)
+
+Parameters:
+
+- userid <string|int>
+
+Returns:
+
+- <function> - A function with is, isnt, can and cant methods populated with userid
+
+Example:
+
+```js
+var userId = 1
+admittance(userId) //returns a new function with methods is, isnt, can and cant
+```
+
+#### .is(permission)
 
 Test if a given 'id' can be matched with given 'permission'
 
-`isnt(permission)`
+Parameters:
 
-Opposite of is. Equivalent of writing `!admittance(id).is(permission)`
+- permission <string>
 
-`can(permission)`
+Returns:
 
-Alias for is
+- <boolean>
 
-`cant(permission)`
+Example:
 
-Alias for isnt
+```js
+admittance(userId).is('admin') //true or false
+```
+
+#### .isnt(permission)
+
+Opposite of `is`. Equivalent of writing `!admittance(id).is(permission)`
+
+Parameters:
+
+- permission <string>
+
+Returns:
+
+- <boolean>
+
+Example:
+
+```js
+admittance(userId).isnt('admin') //true or false
+```
+
+#### .can(permission)
+
+Alias for `is`
+
+Parameters:
+
+- permission <string>
+
+Returns:
+
+- <boolean>
+
+Example:
+
+```js
+admittance(userId).can('edit') //true or false
+```
+
+#### .cant(permission)
+
+Alias for `isnt`
+
+Parameters:
+
+- permission <string>
+
+Returns:
+
+- <boolean>
+
+Example:
+
+```js
+admittance(userId).cant('edit') //true or false
+```
 
 <a name="tests"></a>
 ## Tests
