@@ -11,43 +11,43 @@ describe('admittance', function () {
   describe('checking permissions', function () {
 
     it('should return true when a user has a given permission', function () {
-      admittance.load({}, {1:'admin'})
+      var user = admittance({}, {1:'admin'})
       var userid = 1
-      expect(admittance(userid).is('admin')).to.equal(true)
+      expect(user(userid).is('admin')).to.equal(true)
     })
 
     it('should return false when a user does not have a given permission', function () {
-      admittance.load({}, {1: 'admin'})
+      var user = admittance({}, {1: 'admin'})
       var userid = 1
-      expect(admittance(userid).is('monkey')).to.equal(false)
+      expect(user(userid).is('monkey')).to.equal(false)
     })
 
     it('should return true when a user has several permissions assigned', function () {
-      admittance.load({}, {1: ['admin', 'subscriber']})
+      var user = admittance({}, {1: ['admin', 'subscriber']})
       var userid = 1
-      expect(admittance(userid).is('admin')).to.equal(true)
-      expect(admittance(userid).is('subscriber')).to.equal(true)
-      expect(admittance(userid).is('monkey')).to.equal(false)
+      expect(user(userid).is('admin')).to.equal(true)
+      expect(user(userid).is('subscriber')).to.equal(true)
+      expect(user(userid).is('monkey')).to.equal(false)
     })
 
     it('should return false if userid is undefined or null', function () {
-      admittance.load({}, {1: ['admin', 'subscriber']})
+      var user = admittance({}, {1: ['admin', 'subscriber']})
       var userid
-      expect(admittance(userid).is('admin')).to.equal(false)
+      expect(user(userid).is('admin')).to.equal(false)
       userid = null
-      expect(admittance(userid).is('admin')).to.equal(false)
+      expect(user(userid).is('admin')).to.equal(false)
     })
 
     it('should return false if permission is empty', function () {
-      admittance.load({}, {1: ['admin', 'subscriber']})
+      var user = admittance({}, {1: ['admin', 'subscriber']})
       var userid = 1
-      expect(admittance(userid).is('')).to.equal(false)
+      expect(user(userid).is('')).to.equal(false)
     })
 
     it('should return false if is is called with no parameter', function () {
-      admittance.load({}, {1: ['admin', 'subscriber']})
+      var user = admittance({}, {1: ['admin', 'subscriber']})
       var userid = 1
-      expect(admittance(userid).is()).to.equal(false)
+      expect(user(userid).is()).to.equal(false)
     })
 
   })
@@ -58,55 +58,9 @@ describe('admittance', function () {
       var permissions = {
         'admin': 'subscriber'
       }
-      admittance.load(permissions, {1: 'admin'})
+      var user = admittance(permissions, {1: 'admin'})
       var userid = 1
-      expect(admittance(userid).is('subscriber')).to.equal(true)
-    })
-
-  })
-
-  describe('#getAllChildren method', function () {
-
-    it('should get all children from a permissions tree', function () {
-      var getAllChildren  = admitRewire.__get__('getAllChildren')
-        , permissions     = {
-        'admin': 'editor',
-        'editor': 'subscriber',
-        'superadmin': ['admin', 'user']
-      }
-
-      admitRewire.load(permissions)
-
-      var allChildren = getAllChildren('superadmin')
-
-      expect(allChildren[0]).to.equal('admin')
-      expect(allChildren[1]).to.equal('user')
-      expect(allChildren[2]).to.equal('editor')
-      expect(allChildren[3]).to.equal('subscriber')
-
-    })
-
-  })
-
-  describe('#checkIsParent method', function () {
-
-    it('should return true if a permission is a child of a given parent', function () {
-
-      var checkIsParent   = admitRewire.__get__('checkIsParent')
-        , permissions     = {
-        'admin': 'editor',
-        'editor': 'subscriber',
-        'superadmin': ['admin', 'user']
-      }
-
-      admitRewire.load(permissions)
-
-      expect(checkIsParent('admin', 'admin')).to.equal(false)
-      expect(checkIsParent('admin', 'editor')).to.equal(true)
-      expect(checkIsParent('admin', 'subscriber')).to.equal(true)
-      expect(checkIsParent('superadmin', 'subscriber')).to.equal(true)
-      expect(checkIsParent('user', 'editor')).to.equal(false)
-
+      expect(user(userid).is('subscriber')).to.equal(true)
     })
 
   })
@@ -117,20 +71,19 @@ describe('admittance', function () {
 
       var getDirectChildren   = admitRewire.__get__('getDirectChildren')
         , children
-        , permissions         = {
+
+      var permissions = {
         'admin': 'editor',
         'editor': 'subscriber',
         'superadmin': ['admin', 'user']
       }
 
-      admitRewire.load(permissions)
-
-      children = getDirectChildren('superadmin')
+      children = getDirectChildren(permissions, 'superadmin')
       expect(children[0]).to.equal('admin')
       expect(children[1]).to.equal('user')
       expect(children.length).to.equal(2)
 
-      children = getDirectChildren('admin')
+      children = getDirectChildren(permissions, 'admin')
       expect(children[0]).to.equal('editor')
       expect(children.length).to.equal(1)
 
@@ -144,24 +97,17 @@ describe('admittance', function () {
 
       var getUserPermissions  = admitRewire.__get__('getUserPermissions')
         , userPermissions
-        , permissions         = {
-        'admin': 'editor',
-        'editor': 'subscriber',
-        'superadmin': ['admin', 'user']
-      }
 
       var assignments = {
         1: 'editor',
         2: 'superadmin'
       }
 
-      admitRewire.load(permissions, assignments)
-
-      userPermissions = getUserPermissions(1)
+      userPermissions = getUserPermissions(assignments, 1)
       expect(userPermissions).to.contain('editor')
       expect(userPermissions).not.to.contain('admin')
 
-      userPermissions = getUserPermissions(2)
+      userPermissions = getUserPermissions(assignments, 2)
       expect(userPermissions).to.contain('superadmin')
 
     })
@@ -174,18 +120,62 @@ describe('admittance', function () {
 
       var getDirectPermissionChildren = admitRewire.__get__('getDirectPermissionChildren')
         , directPermissions
-        , permissions                 = {
+
+      var permissions = {
         'admin': 'editor',
         'editor': 'subscriber',
         'superadmin': ['admin', 'user']
       }
 
-      admitRewire.load(permissions)
-
-      directPermissions = getDirectPermissionChildren('superadmin')
+      directPermissions = getDirectPermissionChildren(permissions, 'superadmin')
       expect(directPermissions).to.contain('admin')
       expect(directPermissions).to.contain('user')
       expect(directPermissions).not.to.contain('editor')
+
+    })
+
+  })
+
+  describe('#getAllChildren method', function () {
+
+    it('should get all children from a permissions tree', function () {
+      var getAllChildren  = admitRewire.__get__('getAllChildren')
+
+      var permissions = {
+        'admin': 'editor',
+        'editor': 'subscriber',
+        'superadmin': ['admin', 'user']
+      }
+
+      var allChildren = getAllChildren(permissions, 'superadmin')
+
+      expect(allChildren[0]).to.equal('admin')
+      expect(allChildren[1]).to.equal('user')
+
+      expect(allChildren[2]).to.equal('editor')
+      expect(allChildren[3]).to.equal('subscriber')
+
+    })
+
+  })
+
+  describe('#checkIsParent method', function () {
+
+    it('should return true if a permission is a child of a given parent', function () {
+
+      var checkIsParent = admitRewire.__get__('checkIsParent')
+
+      var permissions = {
+        'admin': 'editor',
+        'editor': 'subscriber',
+        'superadmin': ['admin', 'user']
+      }
+
+      expect(checkIsParent(permissions, 'admin', 'admin')).to.equal(false)
+      expect(checkIsParent(permissions, 'admin', 'editor')).to.equal(true)
+      expect(checkIsParent(permissions, 'admin', 'subscriber')).to.equal(true)
+      expect(checkIsParent(permissions, 'superadmin', 'subscriber')).to.equal(true)
+      expect(checkIsParent(permissions, 'user', 'editor')).to.equal(false)
 
     })
 
@@ -195,8 +185,9 @@ describe('admittance', function () {
 
     it('should return true if a given user has (directly or indirectly) a given permission', function () {
 
-      var checkAccess   = admitRewire.__get__('checkAccess')
-        , permissions   = {
+      var checkAccess = admitRewire.__get__('checkAccess')
+
+      var permissions = {
         'admin': 'editor',
         'editor': 'subscriber',
         'superadmin': ['admin', 'user']
@@ -207,9 +198,7 @@ describe('admittance', function () {
         2: 'superadmin'
       }
 
-      admitRewire.load(permissions, assignments)
-
-      expect(checkAccess(2, 'superadmin')).to.equal(true)
+      expect(checkAccess(permissions, assignments, 2, 'superadmin')).to.equal(true)
 
     })
 
@@ -219,17 +208,17 @@ describe('admittance', function () {
 
     it('should return true if a given user does not have a given permission',
       function () {
-      admitRewire.load({}, {1: 'admin'})
-      expect(admittance(1).isnt('editor')).to.equal(true)
+      var user = admittance({}, {1: 'admin'})
+      expect(user(1).isnt('editor')).to.equal(true)
     })
 
   })
 
   describe('#can method', function () {
     it('should return true when a user has a given permission', function () {
-      admittance.load({}, {1:'edit'})
+      var user = admittance({}, {1:'edit'})
       var userid = 1
-      expect(admittance(userid).can('edit')).to.equal(true)
+      expect(user(userid).can('edit')).to.equal(true)
     })
   })
 
@@ -237,21 +226,21 @@ describe('admittance', function () {
 
     it('should return true if a given user does not have a given permission',
       function () {
-      admitRewire.load({}, {1: 'admin'})
-      expect(admittance(1).cant('editor')).to.equal(true)
+      var user = admittance({}, {1: 'admin'})
+      expect(user(1).cant('editor')).to.equal(true)
     })
 
   })
 
-  describe('#load method', function () {
+  describe('multiple admittance instances', function () {
+    it('can be created at one time', function () {
 
-    it('should load a permissions object and an assignments object',
-      function () {
-      admitRewire.load({'admin': 'subscriber'}, {1: 'admin'})
-      expect(admitRewire.__get__('permissions').admin).to.equal('subscriber')
-      expect(admitRewire.__get__('assignments')['1']).to.equal('admin')
+      var user1 = admittance({}, {1: 'admin'})
+      expect(user1(1).is('admin')).to.equal(true)
+
+      var user2 = admittance({}, {1: 'user'})
+      expect(user2(1).is('user')).to.equal(true)
     })
-
   })
 
 })
