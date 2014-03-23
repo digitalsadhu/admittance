@@ -8,6 +8,7 @@
 * <a href="#usage">Usage</a>
 * <a href="#writing-permissions">Writing permissions</a>
 * <a href="#writing-assignments">Writing assignments</a>
+* <a href="#business-rules">Business rules</a>
 * <a href="#api">API</a>
 * <a href="#tests">Tests</a>
 * <a href="#example">Example</a>
@@ -76,8 +77,12 @@ if (user(1).can('readPosts'))
 if (user(1).can('listPosts'))
   console.log('user 1 can list posts')
 
-if (user(1).can('editPosts'))
-  console.log('user 1 can edit posts')
+var post = {
+  creator: 1
+}
+
+if (user(1).can('editPosts', post.creator))
+  console.log('user 1 can edit the post because he/she created it')
 
 if (user(1).can('deletePosts'))
   console.log('user 1 can delete posts')
@@ -170,6 +175,41 @@ example:
 
 }
 ```
+
+<a name="business-rules"></a>
+## Business rules
+
+Business rules are extra tests relevant to your application that go along side
+permission checks. An example of this is when you have a user that is allowed
+to edit posts ONLY if he or she is the owner (creator) of that post.
+Business rules allow you to provide such tests along side permissions checks.
+
+### Simple id matching
+
+A simple and useful way to solve the example above in admittance is to simply
+pass a matching id as a second parameter to your check. Admittance will then
+verify that this id matches the user id.
+
+Heres an example of how that might look:
+
+```js
+
+var check = admittance(permissions, assignments)
+
+var user = {
+  id: 2,
+  name: 'Mr Banana'
+}
+
+var post = {
+  id: 1
+  owner: 2
+}
+
+check(user.id).can('editPosts', post.owner) //true
+
+``` 
+
 <a name="api"></a>
 ## API
 
@@ -211,31 +251,34 @@ var userId = 1
 admittance(userId) //returns a new function with methods is, isnt, can and cant
 ```
 
-#### .is(permission)
+#### .is(permission, [matchingId])
 
 Test if a given 'id' can be matched with given 'permission'
 
 Parameters:
 
-- permission `<string>`
+- permission `<string>` - the permission to check (eg. 'admin')
+- [matchingId] `<string|int>` - optionally, supply an id to match against `userid`
 
 Returns:
 
-- `<boolean>`
+- `<boolean>` - true if the given userid is said to have given permission and optionally the userid matches the given matchingid
 
 Example:
 
 ```js
 admittance(userId).is('admin') //true or false
+admittance(userid).is('admin', matchingid) //true or false
 ```
 
-#### .isnt(permission)
+#### .isnt(permission, [matchingId])
 
 Opposite of `is`. Equivalent of writing `!admittance(id).is(permission)`
 
 Parameters:
 
 - permission `<string>`
+- [matchingId] `<string|int>`
 
 Returns:
 
@@ -245,15 +288,17 @@ Example:
 
 ```js
 admittance(userId).isnt('admin') //true or false
+admittance(userid).isnt('admin', matchingid) //true or false
 ```
 
-#### .can(permission)
+#### .can(permission, [matchingId])
 
 Alias for `is`
 
 Parameters:
 
 - permission `<string>`
+- [matchingId] `<string|int>`
 
 Returns:
 
@@ -263,15 +308,17 @@ Example:
 
 ```js
 admittance(userId).can('edit') //true or false
+admittance(userId).can('edit', matchingid) //true or false
 ```
 
-#### .cant(permission)
+#### .cant(permission, [matchingId])
 
 Alias for `isnt`
 
 Parameters:
 
 - permission `<string>`
+- [matchingId] `<string|int>`
 
 Returns:
 
@@ -281,6 +328,7 @@ Example:
 
 ```js
 admittance(userId).cant('edit') //true or false
+admittance(userId).cant('edit', matchingid) //true or false
 ```
 
 <a name="tests"></a>
