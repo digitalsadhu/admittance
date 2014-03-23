@@ -210,6 +210,8 @@ describe('admittance', function () {
       function () {
       var user = admittance({}, {1: 'admin'})
       expect(user(1).isnt('editor')).to.equal(true)
+      expect(user(1).isnt('admin', 2)).to.equal(true)
+      expect(user(1).isnt('admin', 1)).to.equal(false)
     })
 
   })
@@ -228,6 +230,49 @@ describe('admittance', function () {
       function () {
       var user = admittance({}, {1: 'admin'})
       expect(user(1).cant('editor')).to.equal(true)
+      expect(user(1).cant('admin', 2)).to.equal(true)
+      expect(user(1).cant('admin', 1)).to.equal(false)
+    })
+
+  })
+
+  describe('#checkExpression function', function () {
+
+    describe('passing an id to verify', function () {
+
+      it('should return true if id matches userid', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1)).to.equal(true)
+      })
+
+      it('should return false if id doesnt match userid', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 2)).to.equal(false)
+      })
+
+    })
+
+    describe('passing nothing as second parameter', function () {
+
+      it('should return true', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1)).to.equal(true)
+      })
+
+    })
+
+    describe('passing an expression to verify', function () {
+
+      it('should return true if the expression resolves to true', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1 === 1)).to.equal(true)
+      })
+
+      it('should return false if the expression resolves to false', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1 === 2)).to.equal(false)
+      })
+
     })
 
   })
@@ -241,6 +286,44 @@ describe('admittance', function () {
       var user2 = admittance({}, {1: 'user'})
       expect(user2(1).is('user')).to.equal(true)
     })
+  })
+
+  describe('business rule checking', function () {
+
+    describe('id match checking', function () {
+
+      it('should behave as normal if no matchingId param is provided', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin')).to.equal(true)
+      })
+
+      it('should verify that ids match if matchingId param is provided', function () {
+
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1)).to.equal(true)
+        expect(user(1).is('admin', 2)).to.equal(false)
+      })
+
+      it('should also perform as expected if numbers are provided as numeric strings', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', '1')).to.equal(true)
+        expect(user(1).is('admin', '2')).to.equal(false)
+      })
+
+    })
+
+    describe('expression checking', function () {
+      it('should return false if the given expression returns false', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1 === 2)).to.equal(false)
+      })
+      it('should return true if the given expression returns true', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1 === 1)).to.equal(true)
+        expect(user(1).is('editor', 1 === 1)).to.equal(false)
+      })
+    })
+
   })
 
 })

@@ -8,6 +8,7 @@
 * <a href="#usage">Usage</a>
 * <a href="#writing-permissions">Writing permissions</a>
 * <a href="#writing-assignments">Writing assignments</a>
+* <a href="#business-rules">Business rules</a>
 * <a href="#api">API</a>
 * <a href="#tests">Tests</a>
 * <a href="#example">Example</a>
@@ -76,8 +77,15 @@ if (user(1).can('readPosts'))
 if (user(1).can('listPosts'))
   console.log('user 1 can list posts')
 
-if (user(1).can('editPosts'))
-  console.log('user 1 can edit posts')
+var post = {
+  creator: 1
+}
+
+if (user(1).can('editPosts', post.creator))
+  console.log('user 1 can edit the post because he/she created it')
+
+if (user(1).can('editPosts', post.creator === 1))
+  console.log('user 1 can edit the post because the given business rule passed')
 
 if (user(1).can('deletePosts'))
   console.log('user 1 can delete posts')
@@ -170,13 +178,86 @@ example:
 
 }
 ```
+
+<a name="business-rules"></a>
+## Business rules
+
+Business rules are extra tests relevant to your application that go along side
+permission checks. An example of this is when you have a user that is allowed
+to edit posts ONLY if he or she is the owner (creator) of that post.
+Business rules allow you to provide such tests along side permissions checks.
+
+### Simple id matching
+
+A simple and useful way to solve the example above in admittance is to simply
+pass a matching id as a second parameter to your check. Admittance will then
+verify that this id matches the user id.
+
+Heres an example of how that might look:
+
+```js
+var permissions = {
+  'editPosts'
+}
+
+var assignments = {
+  2: 'editPosts'
+}
+
+var check = admittance(permissions, assignments)
+
+var user = {
+  id: 2,
+  name: 'Mr Banana'
+}
+
+var post = {
+  id: 1
+  owner: 2
+}
+
+check(user.id).can('editPosts', post.owner) //true
+
+``` 
+
+### Expression checking
+
+Another simple way to add custom checks to specific checks is to pass an
+expression that evaluates to true or false as a second parameter to `is`,
+`can`, `isnt` or `cant`
+
+Example:
+
+```js
+var permissions = {
+  'editPosts'
+}
+
+var assignments = {
+  2: 'editPosts'
+}
+
+var check = admittance(permissions, assignments)
+
+var user = {
+  id: 2,
+  name: 'Mr Banana'
+}
+
+var post = {
+  id: 1
+  owner: 2
+}
+
+check(user.id).can('editPosts', post.owner === user.id) //true
+```
+
 <a name="api"></a>
 ## API
 
-### admittanceModule(permissionsobject, assignmentsobject)
+### admittanceModule(permissions, assignments)
 
-Load permissions and assignments from js objects and return an admittance instance. See the "Writing permissions" and "Writing assignments" sections above
-for how to write a permissions and assignments object
+Load permissions and assignments from js objects and return an admittance instance. See <a href="#writing-permissions">Writing permissions</a> and <a href="#writing-assignments">Writing assignments</a> for how to write permissions and assignments objects
 
 Parameters:
 
@@ -185,13 +266,22 @@ Parameters:
 
 Returns:
 
-- admittance `<function>`
+- admittance `<object>` - An `admittance` function that can be used to check permissions
 
 Example:
 
 ```js
 var admittanceModule = require('admittance')
-var admittance = admittanceModule(permissionsObject, assignmentObject)
+
+var permissions = {
+  'admin'
+}
+
+var assignments = {
+  1: 'admin'
+}
+
+var admittance = admittanceModule(permissions, assignments)
 ```
 
 ### admittance(userid)
@@ -202,22 +292,53 @@ Parameters:
 
 Returns:
 
-- `<function>` - A function with `is`, `isnt`, `can` and `cant` methods populated with userid
+- `<object>` - An object with properties `is`, `isnt`, `can` and `cant`
 
 Example:
 
 ```js
 var userId = 1
-admittance(userId) //returns a new function with methods is, isnt, can and cant
+admittance(userId) // object
 ```
 
-#### .is(permission)
+#### .is(permission, [expression])
 
-Test if a given 'id' can be matched with given 'permission'
+Test if an 'id' given as a parameter to `admittance` can be matched with given 'permission'
+performing optional additional checks via a given `expression` or id
+
+Parameters:
+
+- permission `<string>` - the permission to check (eg. 'admin')
+- [expression] `<string|int|bool>` - optionally, supply one of the following:
+    - An expression that resolves to a boolean. eg. `user.id === post.owner`
+    - A numeric string to match against `userid` eg. '1' (will internally be checked against userid)
+    - A number to match against `userid` eg. 1 (will internally be checked against userid)
+
+Returns:
+
+- `<boolean>` - true if the given userid is said to have given permission and optionally the userid matches the given matchingid
+
+Example:
+
+```js
+admittance(userid).is('admin') //true if user is an admin
+admittance(userid).is('admin', 2) //true if user is an admin and userid === 2
+admittance(userid).is('admin', '2') //true if user is an admin and userid === 2
+admittance(userid).is('admin', 1 === 1) //true if user is an admin
+admittance(userid).is('admin', 1 === 2) //false
+```
+
+#### .isnt(permission, [expression])
+
+Opposite of `is`. Equivalent to negating a call to `is` 
 
 Parameters:
 
 - permission `<string>`
+- [expression] `<string|int|bool>` - optionally, supply one of the following:
+    - An expression that resolves to a boolean. eg. `user.id === post.owner`
+    - A numeric string to match against `userid` eg. '1' (will internally be checked against userid)
+    - A number to match against `userid` eg. 1 (will internally be checked against userid)
 
 Returns:
 
@@ -226,34 +347,24 @@ Returns:
 Example:
 
 ```js
-admittance(userId).is('admin') //true or false
+admittance(userid).isnt('admin') //true if user isnt an admin
+admittance(userid).isnt('admin', 2) //false if userid === 2 and user is admin
+admittance(userid).isnt('admin', '2') //false if userid === 2 and user is admin
+admittance(userid).isnt('admin', 1 === 1) //false if user is admin
+admittance(userid).isnt('admin', 1 === 2) //true
 ```
 
-#### .isnt(permission)
-
-Opposite of `is`. Equivalent of writing `!admittance(id).is(permission)`
-
-Parameters:
-
-- permission `<string>`
-
-Returns:
-
-- `<boolean>`
-
-Example:
-
-```js
-admittance(userId).isnt('admin') //true or false
-```
-
-#### .can(permission)
+#### .can(permission, [expression])
 
 Alias for `is`
 
 Parameters:
 
 - permission `<string>`
+- [expression] `<string|int|bool>` - optionally, supply one of the following:
+    - An expression that resolves to a boolean. eg. `user.id === post.owner`
+    - A numeric string to match against `userid` eg. '1' (will internally be checked against userid)
+    - A number to match against `userid` eg. 1 (will internally be checked against userid)
 
 Returns:
 
@@ -262,16 +373,24 @@ Returns:
 Example:
 
 ```js
-admittance(userId).can('edit') //true or false
+admittance(userid).can('editPosts') //true if user can editPosts
+admittance(userid).can('editPosts', 2) //true if user can editPosts and userid === 2
+admittance(userid).can('editPosts', '2') //true if user can editPosts and userid === 2
+admittance(userid).can('editPosts', 1 === 1) //true if user can editPosts
+admittance(userid).can('editPosts', 1 === 2) //false
 ```
 
-#### .cant(permission)
+#### .cant(permission, [expression])
 
 Alias for `isnt`
 
 Parameters:
 
 - permission `<string>`
+- [expression] `<string|int|bool>` - optionally, supply one of the following:
+    - An expression that resolves to a boolean. eg. `user.id === post.owner`
+    - A numeric string to match against `userid` eg. '1' (will internally be checked against userid)
+    - A number to match against `userid` eg. 1 (will internally be checked against userid)
 
 Returns:
 
@@ -280,7 +399,11 @@ Returns:
 Example:
 
 ```js
-admittance(userId).cant('edit') //true or false
+admittance(userid).cant('editPosts') //true if user cant editPosts
+admittance(userid).cant('editPosts', 2) //false if userid === 2 and user can editPosts
+admittance(userid).cant('editPosts', '2') //false if userid === 2 and user can editPosts
+admittance(userid).cant('editPosts', 1 === 1) //false if user can editPosts
+admittance(userid).cant('editPosts', 1 === 2) //true
 ```
 
 <a name="tests"></a>

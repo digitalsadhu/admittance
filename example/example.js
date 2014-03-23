@@ -32,8 +32,15 @@ if (user(1).can('readPosts'))
 if (user(1).can('listPosts'))
   console.log('user 1 can list posts')
 
-if (user(1).can('editPosts'))
-  console.log('user 1 can edit posts')
+var post = {
+  creator: 1
+}
+
+if (user(1).can('editPosts', post.creator))
+  console.log('user 1 can edit the post because he/she created it')
+
+if (user(1).can('editPosts', post.creator === 1))
+  console.log('user 1 can edit the post because the given business rule passed')
 
 if (user(1).can('deletePosts'))
   console.log('user 1 can delete posts')

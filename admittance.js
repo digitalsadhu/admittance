@@ -54,20 +54,35 @@ var checkAccess = function (permissions, assignments, userid, permission) {
   return false
 }
 
+var checkExpression = function (userid, expression) {
+  var success = true;
+  if (parseInt(expression).toString() !== 'NaN')
+    success = (parseInt(expression, 10) === parseInt(userid, 10))
+  if (typeof expression === 'boolean')
+    success = expression
+  return success
+}
+
+var is = function (permissions, assignments, userid, permission, expression) {
+  var access = checkAccess(permissions, assignments, userid, permission)
+  var expressionPasses = checkExpression(userid, expression)
+  return access && expressionPasses
+}
+
 var admittance = function (permissions, assignments) {
   return function (userid) {
     return {
-      is: function (permission) {
-        return checkAccess(permissions, assignments, userid, permission)
+      is: function (permission, expression) {
+        return is(permissions, assignments, userid, permission, expression)
       },
-      isnt: function (permission) {
-        return !checkAccess(permissions, assignments, userid, permission)
+      isnt: function (permission, expression) {
+        return !is(permissions, assignments, userid, permission, expression)
       },
-      can: function (permission) {
-        return checkAccess(permissions, assignments, userid, permission)
+      can: function (permission, expression) {
+        return is(permissions, assignments, userid, permission, expression)
       },
-      cant: function (permission) {
-        return !checkAccess(permissions, assignments, userid, permission)
+      cant: function (permission, expression) {
+        return !is(permissions, assignments, userid, permission, expression)
       }
     }
   }
