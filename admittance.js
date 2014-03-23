@@ -67,28 +67,26 @@ var checkExpression = function (userid, expression) {
   return success
 }
 
+var is = function (permissions, assignments, userid, permission, expression) {
+  var access = checkAccess(permissions, assignments, userid, permission)
+  var expressionPasses = checkExpression(userid, expression)
+  return access && expressionPasses
+}
+
 var admittance = function (permissions, assignments) {
   return function (userid) {
     return {
       is: function (permission, expression) {
-        var access = checkAccess(permissions, assignments, userid, permission)
-        var expressionPasses = checkExpression(userid, expression)
-        return access && expressionPasses
+        return is(permissions, assignments, userid, permission, expression)
       },
       isnt: function (permission, expression) {
-        var access = checkAccess(permissions, assignments, userid, permission)
-        var expressionPasses = checkExpression(userid, expression)
-        return !access || !expressionPasses
+        return !is(permissions, assignments, userid, permission, expression)
       },
       can: function (permission, expression) {
-        var access = checkAccess(permissions, assignments, userid, permission)
-        var expressionPasses = checkExpression(userid, expression)
-        return access && expressionPasses
+        return is(permissions, assignments, userid, permission, expression)
       },
       cant: function (permission, expression) {
-        var access = checkAccess(permissions, assignments, userid, permission)
-        var expressionPasses = checkExpression(userid, expression)
-        return !access || !expressionPasses
+        return !is(permissions, assignments, userid, permission, expression)
       }
     }
   }
