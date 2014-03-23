@@ -54,35 +54,41 @@ var checkAccess = function (permissions, assignments, userid, permission) {
   return false
 }
 
-var checkMatchingIds = function (userid, matchingId) {
-  var matchingIds = true;
-  if (matchingId)
-    matchingIds = (parseInt(matchingId, 10) === parseInt(userid, 10))
-  return matchingIds
+var checkExpression = function (userid, expression) {
+
+  var success = true;
+
+  if (typeof expression === 'number')
+    success = (parseInt(expression, 10) === parseInt(userid, 10))
+
+  if (typeof expression === 'boolean')
+    success = expression
+
+  return success
 }
 
 var admittance = function (permissions, assignments) {
   return function (userid) {
     return {
-      is: function (permission, matchingId) {
+      is: function (permission, expression) {
         var access = checkAccess(permissions, assignments, userid, permission)
-        var matchingIds = checkMatchingIds(userid, matchingId)
-        return access && matchingIds
+        var expressionPasses = checkExpression(userid, expression)
+        return access && expressionPasses
       },
-      isnt: function (permission, matchingId) {
+      isnt: function (permission, expression) {
         var access = checkAccess(permissions, assignments, userid, permission)
-        var matchingIds = checkMatchingIds(userid, matchingId)
-        return !access || !matchingIds
+        var expressionPasses = checkExpression(userid, expression)
+        return !access || !expressionPasses
       },
-      can: function (permission, matchingId) {
+      can: function (permission, expression) {
         var access = checkAccess(permissions, assignments, userid, permission)
-        var matchingIds = checkMatchingIds(userid, matchingId)
-        return access && matchingIds
+        var expressionPasses = checkExpression(userid, expression)
+        return access && expressionPasses
       },
-      cant: function (permission, matchingId) {
+      cant: function (permission, expression) {
         var access = checkAccess(permissions, assignments, userid, permission)
-        var matchingIds = checkMatchingIds(userid, matchingId)
-        return !access || !matchingIds
+        var expressionPasses = checkExpression(userid, expression)
+        return !access || !expressionPasses
       }
     }
   }

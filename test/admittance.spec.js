@@ -236,6 +236,47 @@ describe('admittance', function () {
 
   })
 
+  describe('#checkExpression function', function () {
+
+    describe('passing an id to verify', function () {
+
+      it('should return true if id matches userid', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1)).to.equal(true)
+      })
+
+      it('should return false if id doesnt match userid', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 2)).to.equal(false)
+      })
+
+    })
+
+    describe('passing nothing as second parameter', function () {
+
+      it('should return true', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1)).to.equal(true)
+      })
+
+    })
+
+    describe('passing an expression to verify', function () {
+
+      it('should return true if the expression resolves to true', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1 === 1)).to.equal(true)
+      })
+
+      it('should return false if the expression resolves to false', function () {
+        var checkExpression = admitRewire.__get__('checkExpression')
+        expect(checkExpression(1, 1 === 2)).to.equal(false)
+      })
+
+    })
+
+  })
+
   describe('multiple admittance instances', function () {
     it('can be created at one time', function () {
 
@@ -249,35 +290,32 @@ describe('admittance', function () {
 
   describe('business rule checking', function () {
 
-    it('should behave as normal if no matchingId param is provided', function () {
-      var user = admittance({}, {1: 'admin'})
-      expect(user(1).is('admin')).to.equal(true)
+    describe('id match checking', function () {
+
+      it('should behave as normal if no matchingId param is provided', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin')).to.equal(true)
+      })
+
+      it('should verify that ids match if matchingId param is provided', function () {
+
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1)).to.equal(true)
+        expect(user(1).is('admin', 2)).to.equal(false)
+      })
+
     })
 
-    it('should verify that ids match if matchingId param is provided', function () {
-
-      var user = admittance({}, {1: 'admin'})
-      expect(user(1).is('admin', 1)).to.equal(true)
-      expect(user(1).is('admin', 2)).to.equal(false)
-    })
-
-    describe('#checkMatchingIds function', function () {
-
-      it('should return true if matchingId resolves to false', function () {
-        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
-        expect(checkMatchingIds(1)).to.equal(true)
+    describe('expression checking', function () {
+      it('should return false if the given expression returns false', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1 === 2)).to.equal(false)
       })
-
-      it('should return true if matchingId matches userid', function () {
-        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
-        expect(checkMatchingIds(1, 1)).to.equal(true)
+      it('should return true if the given expression returns true', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', 1 === 1)).to.equal(true)
+        expect(user(1).is('editor', 1 === 1)).to.equal(false)
       })
-
-      it('should return false if matchingId doesnt match userid', function () {
-        var checkMatchingIds = admitRewire.__get__('checkMatchingIds')
-        expect(checkMatchingIds(1, 2)).to.equal(false)
-      })
-
     })
 
   })
