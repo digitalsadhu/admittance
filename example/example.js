@@ -39,6 +39,9 @@ var post = {
 if (user(1).can('editPosts', post.creator))
   console.log('user 1 can edit the post because he/she created it')
 
+if (user(1).can('editPosts', post.creator === 1))
+  console.log('user 1 can edit the post because the given business rule passed')
+
 if (user(1).can('deletePosts'))
   console.log('user 1 can delete posts')
 
