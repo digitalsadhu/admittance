@@ -304,6 +304,12 @@ describe('admittance', function () {
         expect(user(1).is('admin', 2)).to.equal(false)
       })
 
+      it('should also perform as expected if numbers are provided as numeric strings', function () {
+        var user = admittance({}, {1: 'admin'})
+        expect(user(1).is('admin', '1')).to.equal(true)
+        expect(user(1).is('admin', '2')).to.equal(false)
+      })
+
     })
 
     describe('expression checking', function () {

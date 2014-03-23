@@ -58,7 +58,7 @@ var checkExpression = function (userid, expression) {
 
   var success = true;
 
-  if (typeof expression === 'number')
+  if (parseInt(expression).toString() !== 'NaN')
     success = (parseInt(expression, 10) === parseInt(userid, 10))
 
   if (typeof expression === 'boolean')
