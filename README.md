@@ -2,6 +2,8 @@
 
 [![NPM](https://nodei.co/npm/admittance.png?compact=true)](https://nodei.co/npm/admittance/)
 
+[http://mediasuite.co.nz/ms-badge.png](http://mediasuite.co.nz)
+
 # Admittance
 
 * <a href="#intro">Intro</a>
