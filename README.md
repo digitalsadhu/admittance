@@ -173,7 +173,7 @@ example:
   "1": ["admin", "reportViewer"],
 
   //userid "2" is an "editor"
-  "2": "admin",
+  "2": "editor",
 
   //userid "3" is a "user"
   "3": "user"
