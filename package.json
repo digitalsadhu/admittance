@@ -28,7 +28,7 @@
   "homepage": "https://github.com/digitalsadhu/admittance",
   "dependencies": {},
   "engines": {
-    "node": ">=0.6 <0.12"
+    "node": ">=0.6"
   },
   "author": "Richard Walker <digitalsadhu@gmail.com>",
   "license": "MIT",
