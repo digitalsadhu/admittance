@@ -56,7 +56,7 @@ var checkAccess = function (permissions, assignments, userid, permission) {
 
 var checkExpression = function (userid, expression) {
   var success = true;
-  if (parseInt(expression).toString() !== 'NaN')
+  if ((expression || expression === 0) && parseInt(expression).toString() !== 'NaN')
     success = (parseInt(expression, 10) === parseInt(userid, 10))
   if (typeof expression === 'boolean')
     success = expression
